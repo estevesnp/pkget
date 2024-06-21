@@ -2,6 +2,11 @@
 
 `pkget` is a simple CLI tool to help you find and install Go packages.
 
+## Motivation
+
+I was tired of having to search for the full package name when I wanted to do `go get`.
+So, I decided to build a simple tool to automate this process.
+
 ## Todo
 
 - [ ] create mvp - compare input to predefined list
