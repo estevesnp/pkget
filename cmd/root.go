@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	limit  int  // get, list
-	update bool // get
+	limit   int    // get, install, search
+	version string // get, install
+	update  bool   // get
 )
 
 var rootCmd = &cobra.Command{

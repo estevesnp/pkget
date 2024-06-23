@@ -17,11 +17,11 @@ You can install it by running:
 
 You have the following commands available:
 
-- `pkgo list <package>`: List all packages that match the given package name.
+- `pkgo search <package>`: Search for and list all packages that match the given package name.
 - `pkgo get <package>`: Get the package with the given name.
 - `pkgo install <package>`: Install the package with the given name.
 
-All commands have a -l flag to define the number of results to be shown, for example `pkgo list gin -l 10`.
+All commands have a -l flag to define the number of results to be shown, for example `pkgo search gin -l 10`.
 
 Additionally, the `pkgo get` command has a -u flag to update the package, for example `pkgo get gin -u`.
 
