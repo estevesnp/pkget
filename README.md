@@ -28,4 +28,3 @@ Additionally, the `pkgo get` command has a -u flag to update the package, for ex
 ## TODO
 
 - [ ] Add tests
-- [ ] Add -v flag to define versions on get and install commands

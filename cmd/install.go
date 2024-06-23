@@ -11,20 +11,22 @@ import (
 )
 
 var installCmd = &cobra.Command{
-	Use:     "install [pkg]",
-	Short:   "Install a package",
-	Long:    `Install a package to your Go Path, similarly to doing "install get [pkg]". Requires having Go installed.`,
+	Use:   "install [pkg]",
+	Short: "Install a package",
+	Long: `Install a package to your Go Path, similarly to doing "install get [pkg]". Requires having Go installed.
+You can define a limit of displayed packages with the -l flag and pass a version with the -v flag.`,
 	Args:    cobra.ExactArgs(1),
 	PreRunE: checkAll(checkPath, checkLimit),
-	RunE:    installRun,
+	Run:     installRun,
 }
 
 func init() {
 	installCmd.Flags().IntVarP(&limit, "limit", "l", 5, "limit of packages displayed (1 <= limit <= 100)")
+	installCmd.Flags().StringVarP(&version, "version", "v", "", "define a version for the package")
 	rootCmd.AddCommand(installCmd)
 }
 
-func installRun(cmd *cobra.Command, args []string) error {
+func installRun(cmd *cobra.Command, args []string) {
 	pkgArg := args[0]
 
 	pkgs, err := fetch.SpinWhileFetching(pkgArg, limit)
@@ -33,24 +35,31 @@ func installRun(cmd *cobra.Command, args []string) error {
 	n := len(pkgs)
 	if n == 0 {
 		fmt.Println("No packages found")
-		return nil
+		return
 	}
 
 	pkg, ok := text.ChoosePkg(pkgs, text.Install)
 	if !ok {
-		return nil
+		fmt.Println("No package selected")
+		return
 	}
 
-	version, ok := text.ChooseInstallVersion(pkg)
+	version, ok = verifyVersion(version)
 	if !ok {
-		return nil
+		version, ok = text.ChooseInstallVersion(pkg)
+		if !ok {
+			fmt.Println("No version selected")
+			return
+		}
 	}
 
-	return goInstall(pkg, version)
+	cobra.CheckErr(goInstall(pkg, version))
 }
 
 func goInstall(pkg, version string) error {
 	fullPkg := fmt.Sprintf("%s%s", pkg, version)
+
+	fmt.Printf("\nRunning go install %s...\n", fullPkg)
 
 	cmd := exec.Command("go", "install", fullPkg)
 	cmd.Stdout = os.Stdout

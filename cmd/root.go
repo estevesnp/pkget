@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -26,6 +27,18 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	_ = rootCmd.Execute()
+}
+
+func verifyVersion(version string) (string, bool) {
+	if version == "" {
+		return version, false
+	}
+
+	if !strings.HasPrefix(version, "@") {
+		version = fmt.Sprintf("@%s", version)
+	}
+
+	return version, true
 }
 
 func checkLimit(_ *cobra.Command, _ []string) error {
