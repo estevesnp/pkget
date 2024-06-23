@@ -1,5 +1,7 @@
 # pkgo
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/estevesnp/pkgo.svg)](https://pkg.go.dev/github.com/estevesnp/pkgo)
+
 `pkgo` is a simple CLI tool to help you find, install and manage Go packages.
 
 ## Motivation
