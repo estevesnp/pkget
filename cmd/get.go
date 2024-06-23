@@ -11,7 +11,7 @@ import (
 )
 
 var getCmd = &cobra.Command{
-	Use:   "get [-u] [pkg]",
+	Use:   "get [pkg]",
 	Short: "Add package to project",
 	Long: `Add a package to your Go project, similarly to doing "go get [pkg]". Requires having Go installed.
 You can pass some of the same flags as you would pass the "go get" command.`,
