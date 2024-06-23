@@ -1,6 +1,6 @@
-# pkget
+# pkgo
 
-`pkget` is a simple CLI tool to help you find, install and manage Go packages.
+`pkgo` is a simple CLI tool to help you find, install and manage Go packages.
 
 ## Motivation
 

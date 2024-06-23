@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/estevesnp/pkget/internal/text"
+	"github.com/estevesnp/pkgo/internal/text"
 )
 
 func FetchPackages(pkg string, limit int) ([]string, error) {

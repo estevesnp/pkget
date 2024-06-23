@@ -14,9 +14,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "pkget",
+	Use:   "pkgo",
 	Short: "Find and install Go packages",
-	Long:  "pkget is a simple CLI tool to help you find, install and manage Go packages.",
+	Long:  "pkgo is a simple CLI tool to help you find, install and manage Go packages.",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Usage()
 		os.Exit(1)

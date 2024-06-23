@@ -1,4 +1,4 @@
-module github.com/estevesnp/pkget
+module github.com/estevesnp/pkgo
 
 go 1.22.4
 

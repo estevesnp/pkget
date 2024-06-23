@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/estevesnp/pkget/internal/fetch"
-	"github.com/estevesnp/pkget/internal/text"
+	"github.com/estevesnp/pkgo/internal/fetch"
+	"github.com/estevesnp/pkgo/internal/text"
 	"github.com/spf13/cobra"
 )
 

@@ -3,7 +3,7 @@ package main
 import (
 	_ "embed"
 
-	"github.com/estevesnp/pkget/cmd"
+	"github.com/estevesnp/pkgo/cmd"
 )
 
 func main() {
