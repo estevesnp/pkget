@@ -133,6 +133,8 @@ func ChooseInstallVersion(pkg string) (string, bool) {
 
 > `, pkg)
 
+	fmt.Println()
+
 	for {
 		fmt.Print(prompt)
 
