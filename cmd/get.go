@@ -30,9 +30,7 @@ func getRun(cmd *cobra.Command, args []string) error {
 	pkgArg := args[0]
 
 	pkgs, err := fetch.SpinWhileFetching(pkgArg, limit)
-	if err != nil {
-		return err
-	}
+	cobra.CheckErr(err)
 
 	n := len(pkgs)
 	if n == 0 {
@@ -40,7 +38,7 @@ func getRun(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	pkg, ok := text.ChoosePkg(pkgs)
+	pkg, ok := text.ChoosePkg(pkgs, text.Get)
 	if !ok {
 		return nil
 	}

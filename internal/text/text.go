@@ -9,9 +9,20 @@ import (
 	"time"
 )
 
-const Basic = `-/|\`
+type Animation string
 
-func Spinner(text, spinStr string, delay time.Duration, done <-chan bool) {
+const Basic Animation = `-/|\`
+
+type MessageTemplate int
+
+const (
+	Get MessageTemplate = iota
+	Install
+)
+
+var scan = bufio.NewScanner(os.Stdin)
+
+func Spinner(text string, spinStr Animation, delay time.Duration, done <-chan bool) {
 	spinChars := []rune(spinStr)
 	n := len(spinChars)
 	idx := 0
@@ -27,7 +38,7 @@ func Spinner(text, spinStr string, delay time.Duration, done <-chan bool) {
 	}
 }
 
-func ChoosePkg(pkgs []string) (string, bool) {
+func ChoosePkg(pkgs []string, msgtype MessageTemplate) (string, bool) {
 	n := len(pkgs)
 	if n == 0 {
 		panic("pkgs shouldn't be empty")
@@ -35,10 +46,17 @@ func ChoosePkg(pkgs []string) (string, bool) {
 
 	if n == 1 {
 		pkg := pkgs[0]
-		return pkg, getSingleAnswer(pkg)
+		return pkg, getSingleAnswer(pkg, msgtype)
 	}
 
-	fmt.Println("Choose a package:")
+	switch msgtype {
+	case Get:
+		fmt.Println("Choose a package to get:")
+	case Install:
+		fmt.Println("Choose a package to install:")
+	default:
+		fmt.Println("Choose a package:")
+	}
 
 	for i, p := range pkgs {
 		fmt.Printf("%d. %s\n", i+1, p)
@@ -54,11 +72,18 @@ func ChoosePkg(pkgs []string) (string, bool) {
 	return pkgs[num-1], true
 }
 
-func getSingleAnswer(pkg string) bool {
-	s := bufio.NewScanner(os.Stdin)
-	fmt.Printf("Use package %s? (y/n)\n> ", pkg)
-	s.Scan()
-	ans := strings.ToLower(s.Text())
+func getSingleAnswer(pkg string, msgtype MessageTemplate) bool {
+	switch msgtype {
+	case Get:
+		fmt.Printf("Get package %s? (y/n)\n> ", pkg)
+	case Install:
+		fmt.Printf("Install package %s? (y/n)\n> ", pkg)
+	default:
+		fmt.Printf("Choose package %s? (y/n)\n> ", pkg)
+	}
+
+	scan.Scan()
+	ans := strings.ToLower(scan.Text())
 
 	return ans == "y" || ans == "yes" || ans == ""
 }
@@ -68,22 +93,20 @@ func getNum(opts int) (int, bool) {
 	var err error
 	var n int
 
-	s := bufio.NewScanner(os.Stdin)
-
 	msg := fmt.Sprintf("(1..%d/n)\n> ", opts)
 
 	fmt.Print(msg)
 
 	for {
-		s.Scan()
+		scan.Scan()
 
-		ans = s.Text()
+		ans = strings.ToLower(scan.Text())
 
 		if ans == "" {
 			return 1, true
 		}
 
-		if ans == "n" || ans == "N" {
+		if ans == "n" || ans == "no" {
 			return -1, false
 		}
 
@@ -100,4 +123,44 @@ func getNum(opts int) (int, bool) {
 
 		return n, true
 	}
+}
+
+func ChooseInstallVersion(pkg string) (string, bool) {
+	prompt := fmt.Sprintf(`Choose version of %s to install:
+1. @latest
+2. other
+3. cancel
+
+> `, pkg)
+
+	for {
+		fmt.Print(prompt)
+
+		scan.Scan()
+		switch scan.Text() {
+		case "", "1":
+			return "@latest", true
+		case "2":
+			return getOtherVersion()
+		case "3":
+			return "", false
+		}
+	}
+}
+
+func getOtherVersion() (string, bool) {
+	fmt.Print("Write the version you want (or /q to cancel):\n> ")
+	scan.Scan()
+
+	ans := scan.Text()
+
+	if ans == "/q" || ans == "" {
+		return "", false
+	}
+
+	if strings.HasPrefix(ans, "@") {
+		return ans, true
+	}
+
+	return fmt.Sprintf("@%s", ans), true
 }
