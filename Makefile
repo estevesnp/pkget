@@ -3,3 +3,6 @@ build:
 
 run: build
 	@./bin/pkgo
+
+test:
+	@go test -v ./...
